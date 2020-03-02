@@ -27,6 +27,14 @@ th {
   font-size: 22px;
 }
 
-th.month{
-  vertical-align: middle;
+.sun{
+  color: #FF0000;
+}
+
+.sat{
+  color: #808080;
+}
+
+.grey{
+  color: #F2F2F2;
 }
