@@ -1,29 +1,38 @@
 <?php
-//月遷移ボタンからの値を受けているか判断した上でDateTimeクラスを設定
-if(isset($_GET['action'])){
+//日付妥当性チェック関数
+function validateDate($date, $format = 'Y-m-d')
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
+}
+//月遷移ボタンから正しい値を受けているか判断した上でDateTimeクラスを設定
+if(validateDate($_GET['action'])){
   $date = new DateTime($_GET['action']);
 }else{
   $date = new DateTime();
 }
-//日付開始位置修正用配列
-//第1週には前月分最終週日付が入ることを考慮。この配列で、第1週当月1日までに前月が何日含まれるかを導出。
-//例えば、1日が水曜日だった場合、日～火には前月の最後の3日を設定する。
-$array = [
-    "Sunday" => 0,
-    "Monday" => 1,
-    "Tuesday"=> 2,
-    "Wednesday" => 3,
-    "Thursday" => 4,
-    "Friday" => 5,
-    "Saturday" => 6,
+
+// 日付開始位置修正用配列
+// 第1週には前月分最終週日付が入ることを考慮。
+// 例　日:29 月:30 火:31 水:1 木:2 金:3 土:4
+// この配列で、第1週当月1日までに前月が何日含まれるかを導出し、日付開始位置の調整に用いる
+// 例えば、上記のように1日が水曜日だった場合、日～火には前月の最後の3日を設定する。
+$week_array = [
+  "Sunday" => 0,
+  "Monday" => 1,
+  "Tuesday"=> 2,
+  "Wednesday" => 3,
+  "Thursday" => 4,
+  "Friday" => 5,
+  "Saturday" => 6,
 ];
 //当月1日取得(この時点で1日を設定しておく。)
 $date->modify("first day of this month");
 //カレンダー開始日を補正するための日数を取得
-$modification = - $array[$date->format("l")];
+$start_date_correction = - $week_array[$date->format("l")];
 
 // 当月以外の日付は薄いグレーで出力するために、当月の値を退避
-$month = $date->format('M');
+$current_month = $date->format('M');
 ?>
 
 <!DOCTYPE html>
@@ -40,24 +49,24 @@ $month = $date->format('M');
     <div id="container">
       <!-- 先月、今月、当月のボタンを設定するために情報を取得 -->
       <?php
-      $prev = $date->modify('-1 month')->format('Y-m-d');
-      $next = $date->modify('+2 month')->format('Y-m-d');
+      $previous_month = $date->modify('-1 month')->format('Y-m-d');
+      $next_month = $date->modify('+2 month')->format('Y-m-d');
       // 後の計算元の月に戻す
       $date->modify('-1 month');
       //今月の取得
-      $newdate = new Datetime();
-      $thismonth = $newdate->format('Y-m-d');
+      $new_date = new Datetime();
+      $this_month = $new_date->format('Y-m-d');
       ?>
     <!-- ボタンの設定 -->
       <form action="index.php" method="get">
-        <button type='submit' name='action' value=<?php echo $prev; ?>>先月</button>
-        <button type='submit' name='action' value=<?php echo $thismonth; ?> >今月</button>
-        <button type='submit' name='action' value=<?php echo $next; ?> >翌月</button>
+        <button type='submit' name='action' value=<?php echo $previous_month; ?>>先月</button>
+        <button type='submit' name='action' value=<?php echo $this_month; ?> >今月</button>
+        <button type='submit' name='action' value=<?php echo $next_month; ?> >翌月</button>
       </form>
       <!-- カレンダー日付の表示 -->
       <?php
       //カレンダー開始位置日付の取得
-      $date->modify("+$modification day");
+      $date->modify("+$start_date_correction day");
        ?>
        <!-- テーブルにカレンダーを設定 -->
       <table>
@@ -74,7 +83,7 @@ $month = $date->format('M');
           <tr>
           <?php for ($j=0; $j<7; $j++): ?>
           <!-- 当月以外の日付は薄いグレーで出力 -->
-            <?php if($date->format("M")==$month): ?>
+            <?php if($date->format("M")==$current_month): ?>
               <!-- 日曜日は赤字 -->
               <?php if($date->format("l")=="Sunday"): ?>
                 <td class="sun"><?php echo $date->format("d"); ?></td>
@@ -89,7 +98,7 @@ $month = $date->format('M');
           <?php endfor; ?>
           <!-- 翌月に切り替わっていたらそこでループから抜ける。
           当月の日付が含まれない週を出力しない。 -->
-          <?php if($date->format('M')!=$month){
+          <?php if($date->format('M')!=$current_month){
             break;
           } ?>
           </tr>
