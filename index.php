@@ -127,6 +127,9 @@ $current_month = $date->format('M');
           </tr>
         <?php endfor; ?>
       </table>
+      <?php if(validate_date($_GET['action'])===false): ?>
+        <p>※日付に不正な値が入力されています。<p>
+      <?php endif; ?>
     </div>
   </body>
 </html>
