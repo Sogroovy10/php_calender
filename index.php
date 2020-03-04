@@ -1,13 +1,36 @@
 <?php
-//日付妥当性チェック関数
-function validateDate($date, $format = 'Y-m-d')
+//パラメータ妥当性を調べるためのチェック関数を定義
+function validate_date($date)
 {
-    $d = DateTime::createFromFormat($format, $date);
-    return $d && $d->format($format) == $date;
+  //桁数チェック：10桁であることを確認する
+  if(strlen($date)===10){
+    // フォーマットXXXX-XX-XX(Xは任意の数値)の確認
+    // 1-4桁を$year、5桁目をhyphen1,6-7桁を$month、8桁目を$hyphen2,9-10桁を$dayに代入
+    $year = substr($date,0,4);
+    $hypyen1 = substr($date,4,1);
+    $month = substr($date,5,2);
+    $hypyen2 = substr($date,7,1);
+    $day =substr($date,8,2);
+    //正しいフォーマットであればtrueを返す。
+    if(ctype_digit($year)&&$hypyen1==='-'&&ctype_digit($month)&&$hypyen2==='-'&&ctype_digit($day)){
+      //checkdate関数を用いて日付として許容かチェック
+      return checkdate((int) $month,(int) $day,(int) $year);
+    }else{
+      return false;
+    }
+  }else{
+    return false;
+  }
 }
-//月遷移ボタンから正しい値を受けているか判断した上でDateTimeクラスを設定
-if(validateDate($_GET['action'])){
-  $date = new DateTime($_GET['action']);
+
+//月遷移ボタンから正しい値を受け取っているか判断した上でDateTimeクラスを設定
+//不正な値を受け取っている場合は現在の月を表示させる。
+if(isset($_GET['action'])){
+  if(validate_date($_GET['action'])){
+    $date = new DateTime($_GET['action']);
+  }else{
+    $date = new DateTime();
+  }
 }else{
   $date = new DateTime();
 }
