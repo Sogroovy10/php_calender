@@ -96,22 +96,22 @@ $current_month = $date->format('M');
           <tr>
           <?php for ($j=0; $j<7; $j++): ?>
           <!-- 当月以外の日付は薄いグレーで出力 -->
-            <?php if($date->format('M')==$current_month): ?>
+            <?php if($date->format('M')===$current_month): ?>
               <!-- 日曜日は赤字 -->
-              <?php if($date->format('l')=='Sunday'): ?>
-                <td class="sun"><?php echo $date->format('d'); ?></td>
+              <?php if($date->format('l')==='Sunday'): ?>
+                <td class="sun"><?php echo $date->format('j'); ?></td>
               <?php else: ?>
-                <td><?php echo $date->format('d'); ?></td>
+                <td><?php echo $date->format('j'); ?></td>
               <?php endif; ?>
             <?php else: ?>
-              <td class="grey"><?php echo $date->format('d'); ?></td>
+              <td class="grey"><?php echo $date->format('j'); ?></td>
             <?php endif; ?>
             <!-- 日付カウントアップ -->
             <?php $date->modify('+1 day'); ?>
           <?php endfor; ?>
           <!-- 翌月に切り替わっていたらそこでループから抜ける。
           当月の日付が含まれない週を出力しない。 -->
-          <?php if($date->format('M')!=$current_month){
+          <?php if($date->format('M')!==$current_month){
             break;
           } ?>
           </tr>
