@@ -92,9 +92,9 @@ $current_month = $date->format('M');
         <th>Fri</th>
         <th class="sat">Sut</th>
         <!-- 最大6週間の前提で上で設定した開始日から順に設定 -->
-        <?php for ($i=0; $i<6; $i++): ?>
+        <?php for($i=0; $i<6; $i++): ?>
           <tr>
-          <?php for ($j=0; $j<7; $j++): ?>
+          <?php for($j=0; $j<7; $j++): ?>
           <!-- 当月以外の日付は薄いグレーで出力 -->
             <?php if($date->format('M')===$current_month): ?>
               <!-- 日曜日は赤字 -->
