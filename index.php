@@ -3,7 +3,7 @@
 function validate_date($date)
 {
   //フォーマットが正しいことを確認する。
-  if(preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/',$date,$matches)) {
+  if(preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/',$date,$matches)){
     //checkdate関数を用いて日付として許容かチェック
     //checkdateの引数はint型でmonth,day,year。preg_matchで得られた$matchesの配列を利用する
     return checkdate((int) $matches[2],(int) $matches[3],(int) $matches[1]);
@@ -33,7 +33,7 @@ if(isset($_GET['action'])){
 $week_array = [
   'Sunday' => 0,
   'Monday' => 1,
-  'Tuesday'=> 2,
+  'Tuesday' => 2,
   'Wednesday' => 3,
   'Thursday' => 4,
   'Friday' => 5,
@@ -42,7 +42,7 @@ $week_array = [
 //当月1日取得(この時点で1日を設定しておく。)
 $date->modify('first day of this month');
 //カレンダー開始日を補正するための日数を取得
-$start_date_correction = - $week_array[$date->format('l')];
+$start_date_correction = -$week_array[$date->format('l')];
 
 // 当月以外の日付は薄いグレーで出力するために、当月の値を退避
 $current_month = $date->format('M');
@@ -80,7 +80,7 @@ $current_month = $date->format('M');
       <?php
       //カレンダー開始位置日付の取得
       $date->modify("+$start_date_correction day");
-       ?>
+      ?>
        <!-- テーブルにカレンダーを設定 -->
       <table>
         <!-- 曜日を出力 日曜日は赤字、土曜日は黒字で出力-->
@@ -92,13 +92,13 @@ $current_month = $date->format('M');
         <th>Fri</th>
         <th class="sat">Sut</th>
         <!-- 最大6週間の前提で上で設定した開始日から順に設定 -->
-        <?php for($i=0; $i<6; $i++): ?>
+        <?php for($i = 0; $i < 6; $i++): ?>
           <tr>
-          <?php for($j=0; $j<7; $j++): ?>
+          <?php for($j = 0; $j < 7; $j++): ?>
           <!-- 当月以外の日付は薄いグレーで出力 -->
-            <?php if($date->format('M')===$current_month): ?>
+            <?php if($date->format('M') === $current_month): ?>
               <!-- 日曜日は赤字 -->
-              <?php if($date->format('l')==='Sunday'): ?>
+              <?php if($date->format('l') === 'Sunday'): ?>
                 <td class="sun"><?php echo $date->format('j'); ?></td>
               <?php else: ?>
                 <td><?php echo $date->format('j'); ?></td>
@@ -111,9 +111,11 @@ $current_month = $date->format('M');
           <?php endfor; ?>
           <!-- 翌月に切り替わっていたらそこでループから抜ける。
           当月の日付が含まれない週を出力しない。 -->
-          <?php if($date->format('M')!==$current_month){
+          <?php
+          if($date->format('M') !== $current_month){
             break;
-          } ?>
+          }
+          ?>
           </tr>
         <?php endfor; ?>
       </table>
