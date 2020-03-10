@@ -72,31 +72,27 @@ $current_month = $date->format('M');
        <!-- テーブルにカレンダーを設定 -->
       <table>
         <!-- 曜日を出力 日曜日は赤字、土曜日は黒字で出力-->
-        <?php for($i = 0; $i < 7; $i++){
+        <?php
+        for($i = 0; $i < 7; $i++){
           echo "<th class='{$week_array[$i]}'>$week_array[$i]</th>";
         }
         ?>
         <!-- 最大6週間の前提で上で設定した開始日から順に設定 -->
         <?php for($i = 0; $i < 6; $i++): ?>
           <tr>
-          <?php for($j = 0; $j < 7; $j++): ?>
-          <!-- 当月以外の日付は薄いグレーで出力 -->
-            <?php if($date->format('M') === $current_month): ?>
-              <!-- 日曜日は赤字 -->
-              <?php if((int)$date->format('w') === 0): ?>
-                <td class="Sun"><?php echo $date->format('j'); ?></td>
-              <?php else: ?>
-                <td><?php echo $date->format('j'); ?></td>
-              <?php endif; ?>
-            <?php else: ?>
-              <td class="grey"><?php echo $date->format('j'); ?></td>
-            <?php endif; ?>
-            <!-- 日付カウントアップ -->
-            <?php $date->modify('+1 day'); ?>
-          <?php endfor; ?>
-          <!-- 翌月に切り替わっていたらそこでループから抜ける。
-          当月の日付が含まれない週を出力しない。 -->
           <?php
+          for($j = 0; $j < 7; $j++){
+          // 日曜日は赤字で表示。当月以外の日付は薄いグレーで出力。
+            if($date->format('M') === $current_month){
+              echo "<td class='{$date->format('D')}'>{$date->format('j')}</td>";
+            }else{
+              echo "<td class='grey'>{$date->format('j')}</td>";
+            }
+            //日付カウントアップ
+            $date->modify('+1 day');
+          }
+          // 翌月に切り替わっていたらそこでループから抜ける。
+          // 当月の日付が含まれない週を出力しない
           if($date->format('M') !== $current_month){
             break;
           }
