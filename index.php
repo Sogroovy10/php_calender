@@ -73,8 +73,14 @@ $current_month = $date->format('M');
       <table>
         <!-- 曜日を出力 日曜日は赤字、土曜日は黒字で出力-->
         <?php
-        for($i = 0; $i < 7; $i++){
-          echo "<th class='{$week_array[$i]}'>$week_array[$i]</th>";
+        foreach($week_array as $day){
+          if($day==="Sun"){
+            echo "<th class='Sun'>{$day}</th>";
+          }elseif($day==="Sat"){
+            echo "<th class='Sat'>{$day}</th>";
+          }else{
+            echo "<th>{$day}</th>";
+          }
         }
         ?>
         <!-- 最大6週間の前提で上で設定した開始日から順に設定 -->
@@ -82,9 +88,14 @@ $current_month = $date->format('M');
           <tr>
           <?php
           for($j = 0; $j < 7; $j++){
-          // 日曜日は赤字で表示。当月以外の日付は薄いグレーで出力。
+            //当月以外の日付は薄いグレーで出力。
             if($date->format('M') === $current_month){
-              echo "<td class='{$date->format('D')}'>{$date->format('j')}</td>";
+              //当月の日曜日は赤字で表示
+              if($date->format('w') === "0"){
+                echo "<td class='Sun'>{$date->format('j')}</td>";
+              }else{
+                echo "<td>{$date->format('j')}</td>";
+              }
             }else{
               echo "<td class='grey'>{$date->format('j')}</td>";
             }
