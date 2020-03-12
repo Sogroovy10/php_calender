@@ -28,6 +28,20 @@ if(isset($_GET['action'])){
 // 曜日表示用配列
 $week_array = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
+//曜日の色付けをするクラスを設定するための文字列を返す関数
+//日曜の時はSunクラス、土曜の時はSatクラスを返す。その他はクラスなし。
+function color_class($day)
+{
+  if($day === "Sun"){
+    $class = " class='Sun'";
+  }elseif($day === "Sat"){
+    $class = " class='Sat'";
+  }else{
+    $class = "";
+  }
+    return $class;
+}
+
 //当月1日取得(この時点で1日を設定しておく。)
 $date->modify('first day of this month');
 //カレンダー開始日を日曜日とするために、補正するための日数を取得。
@@ -71,16 +85,11 @@ $current_month = $date->format('M');
       ?>
        <!-- テーブルにカレンダーを設定 -->
       <table>
-        <!-- 曜日を出力 日曜日は赤字、土曜日は黒字で出力-->
+        <!-- 曜日を出力 日曜日は赤字、土曜日はグレーで出力。曜日色付けには関数color_classを用いる-->
         <?php
         foreach($week_array as $day){
-          if($day==="Sun"){
-            echo "<th class='Sun'>{$day}</th>";
-          }elseif($day==="Sat"){
-            echo "<th class='Sat'>{$day}</th>";
-          }else{
-            echo "<th>{$day}</th>";
-          }
+          $class = color_class($day);
+          echo "<th{$class}>{$day}</th>";
         }
         ?>
         <!-- 最大6週間の前提で上で設定した開始日から順に設定 -->
