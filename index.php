@@ -1,5 +1,14 @@
 <?php
-//パラメータ妥当性を調べるためのチェック関数を定義
+
+//最初に、当カレンダープロジェクトで使用する関数validate_date,color_classを定義する
+
+/**
+ *入力された日付文字列'YYYY-MM-DD'の妥当性を調べるためのチェック関数
+ *
+ * @param String $date 日付を表す'YYYY-MM-DD'の形式の文字列
+ *
+ * @return boolean 引数の妥当性OKの場合はtrue, NGの場合はfalseを返す。
+ */
 function validate_date($date)
 {
   //フォーマットが正しいことを確認する。
@@ -10,6 +19,25 @@ function validate_date($date)
   }else{
     return false;
   }
+}
+
+/**
+ *曜日文字列を引数として、土曜日、日曜日の場合は、曜日を色付けするクラスを設定するための文字列を返す関数
+ *
+ * @param String $day 曜日を表す文字列(英字3桁表記)
+ *
+ * @return String 日曜日の場合は、Sunクラスを、土曜日の場合はSatクラスを設定する文字列を返す。その他の曜日は空文字を返す。
+ */
+function color_class($day)
+{
+  if($day === "Sun"){
+    $class = " class='Sun'";
+  }elseif($day === "Sat"){
+    $class = " class='Sat'";
+  }else{
+    $class = "";
+  }
+    return $class;
 }
 
 //月遷移ボタンから正しい値を受け取っているか判断した上でDateTimeクラスを設定
@@ -27,20 +55,6 @@ if(isset($_GET['action'])){
 
 // 曜日表示用配列
 $week_array = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
-//曜日の色付けをするクラスを設定するための文字列を返す関数
-//日曜の時はSunクラス、土曜の時はSatクラスを返す。その他はクラスなし。
-function color_class($day)
-{
-  if($day === "Sun"){
-    $class = " class='Sun'";
-  }elseif($day === "Sat"){
-    $class = " class='Sat'";
-  }else{
-    $class = "";
-  }
-    return $class;
-}
 
 //当月1日取得(この時点で1日を設定しておく。)
 $date->modify('first day of this month');
