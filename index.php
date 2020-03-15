@@ -3,18 +3,17 @@
 //最初に、当カレンダープロジェクトで使用する関数validate_date,color_classを定義する
 
 /**
- *入力された日付文字列'YYYY-MM-DD'の妥当性を調べるためのチェック関数
+ * 入力された日付文字列の妥当性を調べるためのチェック関数
  *
  * @param String $date 日付を表す'YYYY-MM-DD'の形式の文字列
  *
- * @return boolean 引数の妥当性OKの場合はtrue, NGの場合はfalseを返す。
+ * @return boolean 妥当性チェックの結果を返す。
  */
 function validate_date($date)
 {
   //フォーマットが正しいことを確認する。
   if(preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})$/',$date,$matches)){
-    //checkdate関数を用いて日付として許容かチェック
-    //checkdateの引数はint型でmonth,day,year。preg_matchで得られた$matchesの配列を利用する
+    //preg_matchで得られた$matchesの配列を利用して日付として許容かチェック
     return checkdate((int) $matches[2],(int) $matches[3],(int) $matches[1]);
   }else{
     return false;
@@ -22,20 +21,20 @@ function validate_date($date)
 }
 
 /**
- *曜日を色付けするクラスを設定するための関数
+ * 土、日曜日を色付けするクラスを設定するための関数
  *
  * @param String $day 曜日を表す文字列(英字3桁表記)
  *
- * @return String 日曜日の場合は、Sunクラスを、土曜日の場合はSatクラスを設定する文字列を返す。その他の曜日は空文字を返す。
+ * @return String 曜日色付け用のクラスを返す
  */
 function color_class($day)
 {
   if($day === "Sun"){
-    $class = " class='Sun'";
+    $class = "Sun";
   }elseif($day === "Sat"){
-    $class = " class='Sat'";
+    $class = "Sat";
   }else{
-    $class = "";
+    $class = "week";
   }
     return $class;
 }
@@ -103,7 +102,7 @@ $current_month = $date->format('M');
         <?php
         foreach($week_array as $day){
           $class = color_class($day);
-          echo "<th{$class}>{$day}</th>";
+          echo "<th class='{$class}'>{$day}</th>";
         }
         ?>
         <!-- 最大6週間の前提で上で設定した開始日から順に設定 -->
