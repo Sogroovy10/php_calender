@@ -5,9 +5,9 @@
 /**
  * 入力された日付文字列の妥当性を調べるためのチェック関数
  *
- * @param String $date 日付を表す'YYYY-MM-DD'の形式の文字列
+ * @param String $date 'YYYY-MM-DD'形式
  *
- * @return boolean 妥当性チェックの結果を返す。
+ * @return boolean
  */
 function validate_date($date)
 {
@@ -23,9 +23,9 @@ function validate_date($date)
 /**
  * 土、日曜日を色付けするクラスを設定するための関数
  *
- * @param String $day 曜日を表す文字列(英字3桁表記)
+ * @param String $day 曜日(英字3桁表記)
  *
- * @return String 曜日色付け用のクラスを返す
+ * @return String 曜日クラス
  */
 function color_class($day)
 {
@@ -98,7 +98,7 @@ $current_month = $date->format('M');
       ?>
        <!-- テーブルにカレンダーを設定 -->
       <table>
-        <!-- 曜日を出力 日曜日は赤字、土曜日はグレーで出力。曜日色付けには関数color_classを用いる-->
+        <!-- 曜日を出力-->
         <?php
         foreach($week_array as $day){
           $class = color_class($day);
