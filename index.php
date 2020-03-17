@@ -1,6 +1,6 @@
 <?php
 
-//最初に、当カレンダープロジェクトで使用する関数validate_date,color_classを定義する
+//最初に、当カレンダープロジェクトで使用する関数validate_date,get_dow_css_classを定義する
 
 /**
  * 入力された日付文字列の妥当性を調べるためのチェック関数
@@ -21,13 +21,13 @@ function validate_date($date)
 }
 
 /**
- * 土、日曜日を色付けするクラスを設定するための関数
+ * 曜日のcssクラス名を返す関数
  *
  * @param String $day 曜日(英字3桁表記)
  *
- * @return String 曜日クラス
+ * @return String cssクラス名
  */
-function color_class($day)
+function get_dow_css_class($day)
 {
   if($day === "Sun"){
     $class = "Sun";
@@ -101,7 +101,7 @@ $current_month = $date->format('M');
         <!-- 曜日を出力-->
         <?php
         foreach($week_array as $day){
-          $class = color_class($day);
+          $class = get_dow_css_class($day);
           echo "<th class='{$class}'>{$day}</th>";
         }
         ?>
